@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.sql.Timestamp;
+import java.time.LocalTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +16,6 @@ import lombok.ToString;
 public class CustomMessage {
 
     private String symbol;
-
-
-
+    private String price;
+    private String localTime;
 }
