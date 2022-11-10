@@ -1,24 +1,22 @@
 package com.rockhill.rmqproducer.rabbitmq;
 
 
-import org.springframework.boot.json.JsonParseException;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.core.io.UrlResource;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Map;
+
 
 public class YahooAPIHelper {
 
-
-    String url = "https://query1.finance.yahoo.com/v10/finance/quoteSummary/aapl?modules=financialData";
-
     public String apiCall(String symbol){
         RestTemplate restTemplate = new RestTemplate();
-        Object res = restTemplate.getForObject(url, Object.class);
-
+        Object res = restTemplate.getForObject(getUrl(symbol), Object.class);
         return getPriceFromResObj(res);
+    }
+
+    private static String getUrl(String symbol) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(Constants.BASE_URL).append(symbol).append(Constants.QP);
+        return sb.toString();
     }
 
     private static String getPriceFromResObj(Object res) {
@@ -28,14 +26,14 @@ public class YahooAPIHelper {
         is a pretty large JSON.  A more correct way to use
         it would be to write an entity class and
         access the fields accordingly.  But since 1) this
-        example microservice won't be altered and 2) the API
-        response won't likely change, I simply
-        grabbed the raw price via substring methods below.
+        example microservice won't be altered and 2) the Yahoo
+        API response won't likely change, I simply
+        grabbed the raw price via String methods below.
          */
 
 
         String temp = res.toString();
-        int t = temp.indexOf("raw");
+        int t = temp.indexOf(Constants.RWKEY);
         String price = temp.substring(t+4, temp.indexOf(',', t+4));
         return price;
     }
